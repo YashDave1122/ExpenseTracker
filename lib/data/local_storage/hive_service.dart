@@ -1,11 +1,13 @@
+//
 // import 'package:hive/hive.dart';
 // import 'package:path_provider/path_provider.dart';
 // import '../../core/models/transaction.dart';
 // import '../../core/models/budget.dart';
 //
 // class HiveService {
-//   static const String transactionsBox = 'transactions';
-//   static const String budgetsBox = 'budgets';
+//   // Use different names for static constants
+//   static const String _transactionsBoxName = 'transactions';
+//   static const String _budgetsBoxName = 'budgets';
 //
 //   static Future<void> init() async {
 //     final appDocumentDir = await getApplicationDocumentsDirectory();
@@ -17,12 +19,13 @@
 //     Hive.registerAdapter(BudgetAdapter());
 //
 //     // Open boxes
-//     await Hive.openBox<Transaction>(transactionsBox);
-//     await Hive.openBox<Budget>(budgetsBox);
+//     await Hive.openBox<Transaction>(_transactionsBoxName);
+//     await Hive.openBox<Budget>(_budgetsBoxName);
 //   }
 //
-//   Box<Transaction> get transactionsBox => Hive.box<Transaction>(transactionsBox);
-//   Box<Budget> get budgetsBox => Hive.box<Budget>(budgetsBox);
+//   // Instance methods with different names
+//   Box<Transaction> get transactionsBox => Hive.box<Transaction>(_transactionsBoxName);
+//   Box<Budget> get budgetsBox => Hive.box<Budget>(_budgetsBoxName);
 // }
 import 'package:hive/hive.dart';
 import 'package:path_provider/path_provider.dart';
@@ -30,9 +33,8 @@ import '../../core/models/transaction.dart';
 import '../../core/models/budget.dart';
 
 class HiveService {
-  // Use different names for static constants
-  static const String _transactionsBoxName = 'transactions';
-  static const String _budgetsBoxName = 'budgets';
+  static const String transactionsBox = 'transactions';
+  static const String budgetsBox = 'budgets';
 
   static Future<void> init() async {
     final appDocumentDir = await getApplicationDocumentsDirectory();
@@ -44,11 +46,10 @@ class HiveService {
     Hive.registerAdapter(BudgetAdapter());
 
     // Open boxes
-    await Hive.openBox<Transaction>(_transactionsBoxName);
-    await Hive.openBox<Budget>(_budgetsBoxName);
+    await Hive.openBox<Transaction>(transactionsBox);
+    await Hive.openBox<Budget>(budgetsBox);
   }
 
-  // Instance methods with different names
-  Box<Transaction> get transactionsBox => Hive.box<Transaction>(_transactionsBoxName);
-  Box<Budget> get budgetsBox => Hive.box<Budget>(_budgetsBoxName);
+  Box<Transaction> get transactions => Hive.box<Transaction>(transactionsBox);
+  Box<Budget> get budgets => Hive.box<Budget>(budgetsBox);
 }

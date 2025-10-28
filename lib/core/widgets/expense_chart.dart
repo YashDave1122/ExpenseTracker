@@ -88,7 +88,10 @@ class ExpenseChart extends StatelessWidget {
 
 
   Color _getColorForCategory(String category) {
-    final index = AppConstants.categories.indexOf(category) % AppConstants.colors.length;
+    // final index = AppConstants.categories.indexOf(category) % AppConstants.colors.length;
+    // final hexColor = AppConstants.colors[index].replaceAll('#', '');
+    // return Color(int.parse('FF$hexColor', radix: 16));
+    final index = AppConstants.expenseCategories.indexOf(category) % AppConstants.colors.length;
     final hexColor = AppConstants.colors[index].replaceAll('#', '');
     return Color(int.parse('FF$hexColor', radix: 16));
   }
