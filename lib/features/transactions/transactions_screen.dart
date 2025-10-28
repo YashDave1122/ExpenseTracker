@@ -1,10 +1,9 @@
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:pre_dashboard/core/widgets/transaction_tile.dart';
 import '../../app/providers.dart';
 import '../../core/models/transaction.dart';
-import '../../core/utils/formatters.dart';
-
+import '../../core/widgets/transaction_tile.dart';
 
 class TransactionsScreen extends ConsumerWidget {
   const TransactionsScreen({super.key});
@@ -27,16 +26,20 @@ class TransactionsScreen extends ConsumerWidget {
       ),
       body: transactions.isEmpty
           ? _buildEmptyState()
-          : ListView.builder(
-        itemCount: transactions.length,
-        itemBuilder: (context, index) {
-          final transaction = transactions[index];
-          return TransactionTile(
-            transaction: transaction,
-            onDelete: () => _deleteTransaction(context, ref, transaction.id),
-            onTap: () => _editTransaction(context, transaction),
-          );
+          : RefreshIndicator(
+        onRefresh: () async {
+          TransactionActions.refresh(ref);
         },
+        child: ListView.builder(
+          itemCount: transactions.length,
+          itemBuilder: (context, index) {
+            final transaction = transactions[index];
+            return TransactionTile(
+              transaction: transaction,
+              onTap: () => _editTransaction(context, transaction),
+            );
+          },
+        ),
       ),
     );
   }
@@ -62,31 +65,13 @@ class TransactionsScreen extends ConsumerWidget {
               color: Colors.grey[500],
             ),
           ),
-        ],
-      ),
-    );
-  }
-
-  void _deleteTransaction(BuildContext context, WidgetRef ref, String id) {
-    showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: const Text('Delete Transaction'),
-        content: const Text('Are you sure you want to delete this transaction?'),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: const Text('Cancel'),
-          ),
-          TextButton(
+          const SizedBox(height: 20),
+          ElevatedButton.icon(
             onPressed: () {
-              ref.read(transactionsProvider.notifier).deleteTransaction(id);
-              Navigator.pop(context);
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text('Transaction deleted')),
-              );
+              // Navigator.pushNamed(context, '/add-transaction');
             },
-            child: const Text('Delete'),
+            icon: const Icon(Icons.add),
+            label: const Text('Add Your First Transaction'),
           ),
         ],
       ),
