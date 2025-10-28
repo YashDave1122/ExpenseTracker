@@ -1,21 +1,22 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:hive/hive.dart';
 import 'package:mocktail/mocktail.dart';
+import 'package:hive/hive.dart';
 import 'package:pre_dashboard/core/models/transaction.dart';
 import 'package:pre_dashboard/data/repositories/transaction_repository.dart';
 import 'package:pre_dashboard/data/local_storage/hive_service.dart';
 
+// Mock classes
 class MockHiveService extends Mock implements HiveService {}
-class MockBox extends Mock implements Box<Transaction> {}
+class MockBox<T> extends Mock implements Box<T> {}
 
 void main() {
   late MockHiveService mockHiveService;
-  late MockBox mockBox;
+  late MockBox<Transaction> mockBox;
   late TransactionRepository repository;
 
   setUp(() {
     mockHiveService = MockHiveService();
-    mockBox = MockBox();
+    mockBox = MockBox<Transaction>();
     repository = TransactionRepository(mockHiveService);
 
     when(() => mockHiveService.transactions).thenReturn(mockBox);
@@ -33,7 +34,7 @@ void main() {
 
     test('addTransaction should put transaction in box', () async {
       when(() => mockBox.put(testTransaction.id, testTransaction))
-          .thenAnswer((_) async => {});
+          .thenAnswer((_) async {});
 
       await repository.addTransaction(testTransaction);
 
@@ -72,7 +73,7 @@ void main() {
     });
 
     test('deleteTransaction should remove from box', () async {
-      when(() => mockBox.delete('1')).thenAnswer((_) async => {});
+      when(() => mockBox.delete('1')).thenAnswer((_) async {});
 
       await repository.deleteTransaction('1');
 
