@@ -110,7 +110,18 @@ class _AddEditTransactionScreenState extends ConsumerState<AddEditTransactionScr
               const SizedBox(height: 16),
 
               // Notes Field
-
+              IconButton(
+                onPressed: () {
+                  Navigator.pushNamed(context, '/budgets');
+                },
+                icon: const Text(
+                  'Manage your budget',
+                  style: TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+              ),
 
               // Save Button
               ElevatedButton(
